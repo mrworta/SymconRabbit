@@ -40,7 +40,7 @@
         */
         public function GetWork() {
             // Selbsterstellter Code
-	    return "bla";
+	    return "Got some work";
         }
     }
 ?>
