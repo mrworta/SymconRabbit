@@ -1,0 +1,14 @@
+{
+	"id": "{AAB023DC-9BCD-415B-A0C1-70F2690C096D}",
+	"name": "SRMQ",
+	"type": 3,
+	"vendor": "",
+	"aliases": 
+	[
+		"SymconRabbit"
+	],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "SRMQ"
+}
