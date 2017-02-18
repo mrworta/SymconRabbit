@@ -1,0 +1,23 @@
+{
+    "elements":
+    [
+        { "type": "ValidationTextBox", "name": "Server", "caption": "RabbitMQ Server" },
+        { "type": "ValidationTextBox", "name": "Port", "caption": "TCP-Port of Server" },
+        { "type": "ValidationTextBox", "name": "Username", "caption": "Username" },
+        { "type": "ValidationTextBox", "name": "Password", "caption": "Password" },
+    ],
+    "actions":
+    [
+        { "type": "Button", "label": "Fetch Message", "onClick": "SRMQ_GetWork();" },
+        { "type": "ValidationTextBox", "name": "Result", "caption": "Result-Code" },
+        { "type": "ValidationTextBox", "name": "Message", "caption": "Message" },
+    ],
+    "status":
+    [
+        { "code": 101, "icon": "active", "caption": "Got some work" },
+        { "code": 102, "icon": "active", "caption": "Login information valid" },
+        { "code": 201, "icon": "error", "caption": "Authentication failed" },
+        { "code": 202, "icon": "error", "caption": "No work left" }
+        { "code": 203, "icon": "error", "caption": "connection timed out" }
+    ]
+}
