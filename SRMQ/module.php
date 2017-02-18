@@ -15,6 +15,13 @@
         public function Create() {
             // Diese Zeile nicht löschen.
             parent::Create();
+
+
+	    // Create Properties for settings form:
+	    $this->RegisterPropertyString("Server", "");
+	    $this->RegisterPropertyString("Port", "");
+	    $this->RegisterPropertyString("Username", "");
+	    $this->RegisterPropertyString("Password", "");
  
         }
  
