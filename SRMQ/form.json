@@ -8,7 +8,7 @@
     ],
     "actions":
     [
-        { "type": "Button", "label": "Fetch Message", "onClick": "SRMQ_GetWork($id);" },
+        { "type": "Button", "label": "Fetch Message", "onClick": "echo SRMQ_GetWork($id);" },
         { "type": "ValidationTextBox", "name": "Result", "caption": "Result-Code" },
         { "type": "ValidationTextBox", "name": "Message", "caption": "Message" },
     ],
