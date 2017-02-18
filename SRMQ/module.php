@@ -40,6 +40,7 @@
         */
         public function GetWork() {
             // Selbsterstellter Code
+	    return "bla";
         }
     }
 ?>
