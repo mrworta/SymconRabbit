@@ -39,7 +39,7 @@
         *
         */
         public function GetWork() {
-            // Selbsterstellter Code
+	    require __DIR__ . '/vendor/autoload.php';
 	    return "Got some work";
         }
     }
