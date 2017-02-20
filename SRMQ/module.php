@@ -52,7 +52,7 @@
 
 	    try {
 	    	$msg = $channel->basic_get('symcon-alexa');
-		if is_object($msg) { $work = $msg->body; } else { $work = 'No work found.'; }
+		if (is_object($msg)) { $work = $msg->body; } else { $work = 'No work found.'; }
 	    	$channel->basic_ack($msg->delivery_info['delivery_tag']);
 	    } catch (Exception $e) {
 		$work = "Error."; 
