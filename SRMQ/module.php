@@ -57,7 +57,7 @@
 		} else { return null; }
 
 	    } catch (Exception $e) {
-	        IPS_LogMessage("SRMQ", "Exception during MQ operation: ",$e->getMessage());
+	        IPS_LogMessage("SRMQ", "Exception during MQ operation: ".$e->getMessage());
 		return null;
 	    }
 
