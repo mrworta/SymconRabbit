@@ -1,6 +1,7 @@
 <?
     require __DIR__ . '/vendor/autoload.php';
     use PhpAmqpLib\Connection\AMQPStreamConnection;
+    use PhpAmqpLib\Message\AMQPMessage;
 
     // Klassendefinition
     class SRMQ extends IPSModule {
@@ -19,12 +20,12 @@
             // Diese Zeile nicht löschen.
             parent::Create();
 
-
 	    // Create Properties for settings form:
 	    $this->RegisterPropertyString("Server", "");
 	    $this->RegisterPropertyString("Port", "");
 	    $this->RegisterPropertyString("Username", "");
 	    $this->RegisterPropertyString("Password", "");
+	    $this->RegisterPropertyString("Queue", "");
  
         }
  
@@ -37,29 +38,27 @@
         /**
         * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.
         * Die Funktionen werden, mit dem selbst eingerichteten Prefix, in PHP und JSON-RPC wiefolgt zur Verfügung gestellt:
-        *
-        * ABC_MeineErsteEigeneFunktion($id);
-        *
         */
         public function GetWork() {
 	    $mq_srv = $this->ReadPropertyString("Server");
 	    $mq_port = $this->ReadPropertyString("Port");
  	    $mq_user = $this->ReadPropertyString("Username");
  	    $mq_pass = $this->ReadPropertyString("Password");
-
-	    $connection = new AMQPStreamConnection($mq_srv, $mq_port, $mq_user, $mq_pass);
-	    $channel = $connection->channel();
+ 	    $mq_queue = $this->ReadPropertyString("Queue");
 
 	    try {
-	    	$msg = $channel->basic_get('symcon-alexa');
+	    	$connection = new AMQPStreamConnection($mq_srv, $mq_port, $mq_user, $mq_pass);
+	    	$channel = $connection->channel();
+	    	$msg = $channel->basic_get($mq_queue);
+
 		if (is_object($msg)) { 
 	    		$channel->basic_ack($msg->delivery_info['delivery_tag']);
 			return $msg;
-		} else { $work = null; }
+		} else { return null; }
 
 	    } catch (Exception $e) {
+	        IPS_LogMessage("SRMQ", "Exception during MQ operation: ",$e->getMessage());
 		return null;
-		
 	    }
 
         }
