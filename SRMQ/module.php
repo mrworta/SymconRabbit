@@ -50,8 +50,16 @@
 	    $connection = new AMQPStreamConnection($mq_srv, $mq_port, $mq_user, $mq_pass);
 	    $channel = $connection->channel();
 
-	    $msg = $channel->basic_get('symcon-alexa');
-	    return $msg->body;
+	    try {
+	    	$msg = $channel->basic_get('symcon-alexa');
+		$work = $msg->body;
+	    	$channel->basic_ack($msg->delivery_info['delivery_tag']);
+	    } catch (Exception $e) {
+		$work = "No work found."; 
+		
+	    }
+
+	    return $work;
         }
     }
 ?>
