@@ -1,4 +1,7 @@
 <?
+    require __DIR__ . '/vendor/autoload.php';
+    use PhpAmqpLib\Connection\AMQPStreamConnection;
+
     // Klassendefinition
     class SRMQ extends IPSModule {
  
@@ -39,9 +42,6 @@
         *
         */
         public function GetWork() {
-	    require __DIR__ . '/vendor/autoload.php';
-
-	    use PhpAmqpLib\Connection\AMQPStreamConnection;
 	    // use PhpAmqpLib\Message\AMQPMessage;
 
 	    $mq_srv = $this->ReadPropertyString("Server");
