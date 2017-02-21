@@ -39,7 +39,7 @@
         * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.
         * Die Funktionen werden, mit dem selbst eingerichteten Prefix, in PHP und JSON-RPC wiefolgt zur Verfügung gestellt:
         */
-        public function GetWork($id, $ack_msg = true) {
+        public function GetWork($ack_msg = true) {
 	    // 0: $id
 	    // 1: ack message
 	    $mq_srv = $this->ReadPropertyString("Server");
