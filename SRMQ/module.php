@@ -39,7 +39,9 @@
         * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.
         * Die Funktionen werden, mit dem selbst eingerichteten Prefix, in PHP und JSON-RPC wiefolgt zur Verfügung gestellt:
         */
-        public function GetWork() {
+        public function GetWork($id, $ack_msg = true) {
+	    // 0: $id
+	    // 1: ack message
 	    $mq_srv = $this->ReadPropertyString("Server");
 	    $mq_port = $this->ReadPropertyString("Port");
  	    $mq_user = $this->ReadPropertyString("Username");
@@ -52,7 +54,7 @@
 	    	$msg = $channel->basic_get($mq_queue);
 
 		if (is_object($msg)) { 
-	    		$channel->basic_ack($msg->delivery_info['delivery_tag']);
+	    		if ($ack_msg) { $channel->basic_ack($msg->delivery_info['delivery_tag']); }
 			return $msg;
 		} else { return null; }
 
