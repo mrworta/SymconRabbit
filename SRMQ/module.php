@@ -54,7 +54,7 @@
 	    	$msg = $channel->basic_get($mq_queue);
 
 		if (is_object($msg)) { 
-	    		if ($ack_msg) { $channel->basic_ack($msg->delivery_info['delivery_tag']); }
+	    		// if ($ack_msg) { $channel->basic_ack($msg->delivery_info['delivery_tag']); }
 			return $msg;
 		} else { return null; }
 
