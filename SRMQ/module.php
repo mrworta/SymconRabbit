@@ -40,11 +40,12 @@
         * Die Funktionen werden, mit dem selbst eingerichteten Prefix, in PHP und JSON-RPC wiefolgt zur Verfügung gestellt:
         */
 	public function mqConfig() {
+		$mq = new stdClass();
 	        $mq->srv = $this->ReadPropertyString("Server");
 		$mq->port = $this->ReadPropertyString("Port");
 		$mq->user = $this->ReadPropertyString("Username");
 		$mq->pass = $this->ReadPropertyString("Password");
- 	    	$mq->mq_queue = $this->ReadPropertyString("Queue");
+ 	    	$mq->queue = $this->ReadPropertyString("Queue");
 		return $mq;
 	}
 	
