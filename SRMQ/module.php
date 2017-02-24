@@ -48,9 +48,6 @@
 		return $mq;
 	}
 	
-	public function GetWork($ack_msg = true) {
-		GetWorkWithOptions($ack_msg, mqConfig());
-	}
 
         public function GetWorkWithOptions($ack_msg, $mq) {
 	    // 0: $id
@@ -73,5 +70,9 @@
 	    }
 
         }
+
+	public function GetWork($ack_msg = true) {
+		GetWorkWithOptions($ack_msg, mqConfig());
+	}
     }
 ?>
