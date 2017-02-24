@@ -73,7 +73,7 @@
         }
 
 	public function GetWork($ack_msg = true) {
-		$this->GetWorkWithOptions($ack_msg, $this->mqConfig());
+		return $this->GetWorkWithOptions($ack_msg, $this->mqConfig());
 	}
     }
 ?>
