@@ -39,19 +39,28 @@
         * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.
         * Die Funktionen werden, mit dem selbst eingerichteten Prefix, in PHP und JSON-RPC wiefolgt zur Verfügung gestellt:
         */
-        public function GetWork($ack_msg = true) {
+	public function mqConfig() {
+	        $mq->srv = $this->ReadPropertyString("Server");
+		$mq->port = $this->ReadPropertyString("Port");
+		$mq->user = $this->ReadPropertyString("Username");
+		$mq->pass = $this->ReadPropertyString("Password");
+ 	    	$mq->mq_queue = $this->ReadPropertyString("Queue");
+		return $mq;
+	}
+	
+	public function GetWork($ack_msg = true) {
+		GetWorkWithOptions($ack_msg, mqConfig());
+	}
+
+        public function GetWorkWithOptions($ack_msg, $mq) {
 	    // 0: $id
 	    // 1: ack message
-	    $mq_srv = $this->ReadPropertyString("Server");
-	    $mq_port = $this->ReadPropertyString("Port");
- 	    $mq_user = $this->ReadPropertyString("Username");
- 	    $mq_pass = $this->ReadPropertyString("Password");
- 	    $mq_queue = $this->ReadPropertyString("Queue");
+	    // 2: mq parameters 
 
 	    try {
-	    	$connection = new AMQPStreamConnection($mq_srv, $mq_port, $mq_user, $mq_pass);
+	    	$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass);
 	    	$channel = $connection->channel();
-	    	$msg = $channel->basic_get($mq_queue);
+	    	$msg = $channel->basic_get($mq->queue);
 
 		if (is_object($msg)) { 
 	    		if ($ack_msg) { $channel->basic_ack($msg->delivery_info['delivery_tag']); }

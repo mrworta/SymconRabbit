@@ -9,7 +9,7 @@
     ],
     "actions":
     [
-        { "type": "Button", "label": "Fetch Message", "onClick": "var_dump(SRMQ_GetWork($id));" },
+        { "type": "Button", "label": "Fetch Message", "onClick": "var_dump(SRMQ_GetWork($id,false));" },
         { "type": "ValidationTextBox", "name": "Result", "caption": "Result-Code" },
         { "type": "ValidationTextBox", "name": "Message", "caption": "Message" },
     ],
