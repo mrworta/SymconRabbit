@@ -6,6 +6,7 @@
         { "type": "ValidationTextBox", "name": "Username", "caption": "Username" },
         { "type": "PasswordTextBox", "name": "Password", "caption": "Password" },
         { "type": "ValidationTextBox", "name": "Queue", "caption": "RabbitMQ Queue" },
+        { "type": "ValidationTextBox", "name": "LogLevel", "caption": "Module LogLevel" },
     ],
     "actions":
     [

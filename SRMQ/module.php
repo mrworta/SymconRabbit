@@ -26,6 +26,9 @@
 	    $this->RegisterPropertyString("Username", "");
 	    $this->RegisterPropertyString("Password", "");
 	    $this->RegisterPropertyString("Queue", "");
+
+	    $this->RegisterPropertyInteger("LogLevel", 0);
+
  
         }
  
@@ -46,6 +49,8 @@
 		$mq->user = $this->ReadPropertyString("Username");
 		$mq->pass = $this->ReadPropertyString("Password");
  	    	$mq->queue = $this->ReadPropertyString("Queue");
+		$mq->LogLevel = $this->ReadPropertyInteger("LogLevel");
+
 		return $mq;
 	}
 	
@@ -60,17 +65,41 @@
 	    	$channel = $connection->channel();
 	    	$msg = $channel->basic_get($mq->queue);
 
-		if (is_object($msg)) { 
-	    		if ($ack_msg) { $channel->basic_ack($msg->delivery_info['delivery_tag']); }
-			return $msg;
-		} else { return null; }
+		if ($ack_msg && is_object($msg)) { 
+	    		$channel->basic_ack($msg->delivery_info['delivery_tag']); 
+		} 
+
+		$channel->close();
+		$connection->close();
+
+		return $msg;
 
 	    } catch (Exception $e) {
-	        IPS_LogMessage("SRMQ", "Exception during MQ operation: ".$e->getMessage());
+	        if ($mq-LogLevel > 1 ) { IPS_LogMessage("SRMQ", "Exception during MQ operation: ".$e->getMessage()); }
 		return null;
 	    }
 
         }
+
+	public function ProcessOneRPCrequest($ack_msg, $mq) {
+	    	$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass);
+		$channel = $connection->channel();
+
+		$channel->queue_declare($mq->queue, false, false, false, false);
+
+    		$msg = new AMQPMessage(
+        		(string) "jojojo", array('correlation_id' => $req->get('correlation_id'))
+        	);
+
+    		$req->delivery_info['channel']->basic_publish($msg, '', $req->get('reply_to'));
+	        $req->delivery_info['channel']->basic_ack($req->delivery_info['delivery_tag']);
+	
+		$channel->basic_qos(null, 1, null);
+		$channel->basic_consume($mq->queue, '', false, false, false, false, null);
+
+		$channel->close();
+		$connection->close();
+	}
 
 	public function GetWork($ack_msg = true) {
 		return $this->GetWorkWithOptions($ack_msg, $this->mqConfig());
