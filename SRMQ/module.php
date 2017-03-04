@@ -26,7 +26,6 @@
 	    $this->RegisterPropertyString("Username", "");
 	    $this->RegisterPropertyString("Password", "");
 	    $this->RegisterPropertyString("Queue", "");
-
 	    $this->RegisterPropertyInteger("LogLevel", 0);
 
  
@@ -75,7 +74,7 @@
 		return $msg;
 
 	    } catch (Exception $e) {
-	        if ($mq-LogLevel > 1 ) { IPS_LogMessage("SRMQ", "Exception during MQ operation: ".$e->getMessage()); }
+	        if ($mq->LogLevel > 1 ) { IPS_LogMessage("SRMQ", "Exception during MQ operation: ".$e->getMessage()); }
 		return null;
 	    }
 
