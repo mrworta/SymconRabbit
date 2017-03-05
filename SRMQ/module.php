@@ -80,7 +80,7 @@
 
         }
 
-	public function ProcessOneRPCrequest($mq, $callback, $test) {
+	public function ProcessOneRPCrequest($mq, $callback) {
 		$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass);
         	$channel = $connection->channel();
 
