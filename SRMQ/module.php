@@ -80,24 +80,25 @@
 
         }
 
-	public function ProcessOneRPCrequest($ack_msg, $mq) {
-	    	$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass);
-		$channel = $connection->channel();
+	public function ProcessOneRPCrequest($mq, $callback) {
+		$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass);
+        	$channel = $connection->channel();
 
-		$channel->queue_declare($mq->queue, false, false, false, false);
-
-    		$msg = new AMQPMessage(
-        		(string) "jojojo", array('correlation_id' => $req->get('correlation_id'))
-        	);
-
-    		$req->delivery_info['channel']->basic_publish($msg, '', $req->get('reply_to'));
-	        $req->delivery_info['channel']->basic_ack($req->delivery_info['delivery_tag']);
-	
+        	$channel->queue_declare($mq->queue, false, false, false, false);
+				
 		$channel->basic_qos(null, 1, null);
-		$channel->basic_consume($mq->queue, '', false, false, false, false, null);
-
+		$channel->basic_consume($mq->queue, '', false, false, false, false, $callback);
+        				
+		$timeout = 1;
+		try { 
+	    		while(count($channel->callbacks)) { $channel->wait(null, false, $timeout); }
+		} catch (Exception $e) {
+			return null;			
+		}
+		
 		$channel->close();
 		$connection->close();
+
 	}
 
 	public function GetWork($ack_msg = true) {
