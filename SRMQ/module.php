@@ -89,6 +89,7 @@
 		$channel->basic_qos(null, 1, null);
 		$channel->basic_consume($mq->queue, '', false, false, false, false, $callback);
         				
+		// TODO: Check how longer timeout affects symcon
 		$timeout = 1;
 		try { 
 	    		while(count($channel->callbacks)) { $channel->wait(null, false, $timeout); }
@@ -98,6 +99,7 @@
 		
 		$channel->close();
 		$connection->close();
+
 
 	}
 
