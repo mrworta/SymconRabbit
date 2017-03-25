@@ -1,0 +1,138 @@
+<?   
+  
+  function fetchAccount($master, $call, $learn = false) {
+  	// In learn-mode always an account_id 
+	
+	@$account_id = IPS_GetVariableIDByName($call->AmazonAccountEMAIL, $master);
+	if (!$account_id && $learn) {	     		 
+	    $account_id = IPS_CreateVariable(3);
+	    IPS_SetParent($account_id, $master);
+		IPS_SetName($account_id, $call->AmazonAccountEMAIL);
+		SetValue($account_id, $call->AmazonAccountID);		 		 	   	  
+	}
+	
+	return $account_id;
+	  
+  }  
+          
+  function intent_MyLight($master, $call, $learn) {
+  	
+	$account_id = fetchAccount($master, $call);
+	if (!$account_id) { return false; }
+	
+    @$cmd_id = IPS_GetScriptIDByName($call->slots->command, $account_id);	  	   
+    if (!$cmd_id && $learn) {
+	     $cmd_id = IPS_CreateScript(0);
+		 IPS_SetParent($cmd_id, $account_id);
+		 IPS_SetName($cmd_id, $call->slots->command);		   	  
+    }	
+   if (!$cmd_id) { return false; }  
+   
+   IPS_LogMessage("RabbitHandler", "Executing ".$cmd_id." for ".$call->AmazonAccountEMAIL);
+   IPS_RunScript($cmd_id);	 	   	  	  	  					  			  		  											    
+  
+  }
+
+  function intent_Commands($master, $call, $learn = false) {
+	  if (!$call->slots->command) { return false; }
+	  print "Command: ".$call->slots->command;
+	  
+	  $account_id = fetchAccount($master, $call);
+	  if (!$account_id) { return false; }
+	  
+	  @$cmd_group = IPS_GetCategoryIDByName("Commands", $account_id);
+	  if (!$cmd_group) { return false; }	   	  
+	  
+	  @$cmd_id = IPS_GetScriptIDByName($call->slots->command, $cmd_group);	  	   
+      if (!$cmd_id && $learn) {
+	     $cmd_id = IPS_CreateScript(0);
+		 IPS_SetParent($cmd_id, $cmd_group);
+		 IPS_SetName($cmd_id, $call->slots->command);		   	  
+      }
+	  	
+      if (!$cmd_id) { return false; } 
+	  IPS_LogMessage("RabbitHandler", "Executing ".$cmd_id." for ".$call->AmazonAccountEMAIL);
+   	  IPS_RunScript($cmd_id);	 	   	  	  	  					  			  		  			      
+  }
+
+  function intent_LightModule($master, $call, $learn = false) {
+  	  
+  	  if (!$call->slots->room) { echo "Malformed request."; return false; }
+	  if (!$call->slots->command) { echo "Malformed request."; return false; }
+	  if (!fetchAccount($master, $call, false)) { echo "No user in request."; return false; }	  	  	  
+		  
+	  @$intent_id = IPS_GetCategoryIDByName($call->intentName, $master);	   	 
+	  if (!$intent_id) { return false; }	  	  
+	    
+	  @$room_id = IPS_GetCategoryIDByName($call->slots->room, $intent_id);	   
+	  if (!$room_id && $learn) {
+	     $room_id = IPS_CreateCategory();
+		 IPS_SetParent($room_id, $intent_id);
+		 IPS_SetName($room_id, $call->slots->room);		   	  
+	  }	
+	  if (!$room_id) { return false; }  
+	  
+	  @$cmd_id = IPS_GetScriptIDByName($call->slots->command, $room_id);	  	   
+	  if (!$cmd_id && $learn) {
+	     $cmd_id = IPS_CreateScript(0);
+		 IPS_SetParent($cmd_id, $room_id);
+		 IPS_SetName($cmd_id, $call->slots->command);		   	  
+	  }	
+	  if (!$cmd_id) { return false; }  					
+	  	  
+	  @$lastcmd_id = IPS_GetVariableIDByName("last_cmd", $room_id);	   
+	  if (!$lastcmd_id && $learn) {
+	     $lastcmd_id = IPS_CreateVariable(1);
+		 IPS_SetParent($lastcmd_id, $room_id);
+		 IPS_SetName($lastcmd_id, "last_cmd");		   	  
+	  }	
+	  if (!$lastcmd_id) { return false; }
+	  SetValue($lastcmd_id, $cmd_id);
+ 	  			    
+	  	  	  
+	  IPS_LogMessage("RabbitHandler", "Executing ".$cmd_id." for ".$call->AmazonAccountEMAIL);	  
+	  IPS_RunScript($cmd_id);	 	   	  	  	  					  			  		  	   
+  }
+  
+  // Device Links goes here:
+  $master = #;
+  
+  //
+  // DANGER TURN OFF AFTER SETTING UP
+  $learn = true;  // ToDO: Implement "learn-Mode" with timeout
+  //
+  //      
+  $secure = true;
+  $debug = 0;
+
+  // Get Work from Queue:
+
+  $msg=SRMQ_GetWork($master, true);
+        
+  if (is_object($msg)) {  
+  	  $call = json_decode($msg->body);	  
+	  if ($debug > 2) { var_dump($call); }
+  } else { if ($debug > 1) { print "No object returned."; }; return null; }
+  
+  // Security Check. Learn is false. 
+     
+  $ucall = completeAmazonProfile($call);
+  if ($ucall == null) {
+    		IPS_LogMessage("RabbitHandler", "Security issue. Account validation error.");
+			if ($debug > 1) { print "Error validating account with amazon."; }  
+	
+  }
+  $call = $ucall;
+  
+  IPS_LogMessage("RabbitHandler", "Started for: ".$call->AmazonAccountEMAIL);
+  	  	  
+  if ($debug > 1) { print "Requested Intent: ".$call->intentName; }
+  
+  switch ($call->intentName) {
+    case "MyLight":  intent_MyLight($master, $call, $learn); break;	
+	  case "LightModule": intent_LightModule($master, $call, $learn); break;  
+	  case "Commands": intent_Commands($master, $call, $learn); break;								
+	  case "Sleep":   break;				 		
+  }      	   
+
+?>
