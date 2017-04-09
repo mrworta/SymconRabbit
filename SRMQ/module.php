@@ -22,7 +22,7 @@
 
 	    // Create Properties for settings form:
 	    $this->RegisterPropertyString("Server", "");
-	    $this->RegisterPropertyString("Port", "");
+	    $this->RegisterPropertyString("Port", "5672");
 	    $this->RegisterPropertyString("Username", "");
 	    $this->RegisterPropertyString("Password", "");
 	    $this->RegisterPropertyString("vHost", "/");
