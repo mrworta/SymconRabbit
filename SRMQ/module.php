@@ -109,7 +109,7 @@
 		return $this->GetWorkWithOptions($ack_msg, $this->mqConfig());
 	}
 	    
-	public function PutMessage(string $message = "") {
+	public function PutMessage($message = "") {
 	    $mq = $this->mqconfig();
 	    try {	
 		$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass, $mq->vhost);
