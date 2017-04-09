@@ -108,5 +108,29 @@
 	public function GetWork($ack_msg = true) {
 		return $this->GetWorkWithOptions($ack_msg, $this->mqConfig());
 	}
+	    
+	public function PutMessage($message) {
+		
+	    try {	
+		$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass, $mq->vhost);
+
+  		$channel = $connection->channel();
+  		$channel->queue_declare($mq->queue, false, false, false, false);
+  		$h_msg = new AMQPMessage($message);
+
+  		$result = $channel->basic_publish($h_msg, '', $mq->queue);
+
+ 		$channel->close();
+  		$connection->close();	
+		    
+		return $result;
+
+	    } catch (Exception $e) {
+	        if ($mq->LogLevel > 1 ) { IPS_LogMessage("SRMQ", "Exception during MQ operation: ".$e->getMessage()); }
+		return null;
+	    }		    
+		    
+	}
+	    
     }
 ?>
