@@ -5,6 +5,7 @@
         { "type": "ValidationTextBox", "name": "Port", "caption": "TCP-Port of Server" },
         { "type": "ValidationTextBox", "name": "Username", "caption": "Username" },
         { "type": "PasswordTextBox", "name": "Password", "caption": "Password" },
+        { "type": "ValidationTextBox", "name": "vHost", "caption": "RabbitMQ vHost" },
         { "type": "ValidationTextBox", "name": "Queue", "caption": "RabbitMQ Queue" },
         { "type": "ValidationTextBox", "name": "LogLevel", "caption": "Module LogLevel" },
     ],
