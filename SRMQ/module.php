@@ -25,6 +25,7 @@
 	    $this->RegisterPropertyString("Port", "");
 	    $this->RegisterPropertyString("Username", "");
 	    $this->RegisterPropertyString("Password", "");
+	    $this->RegisterPropertyString("vHost", "/");
 	    $this->RegisterPropertyString("Queue", "");
 	    $this->RegisterPropertyInteger("LogLevel", 0);
 
@@ -47,7 +48,8 @@
 		$mq->port = $this->ReadPropertyString("Port");
 		$mq->user = $this->ReadPropertyString("Username");
 		$mq->pass = $this->ReadPropertyString("Password");
- 	    	$mq->queue = $this->ReadPropertyString("Queue");
+		$mq->vhost = $this->ReadPropertyString("vHost");
+ 	    	$mq->queue = $this->ReadPropertyString("Queue");		
 		$mq->LogLevel = $this->ReadPropertyInteger("LogLevel");
 
 		return $mq;
@@ -60,7 +62,7 @@
 	    // 2: mq parameters 
 
 	    try {
-	    	$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass);
+	    	$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass, $mq->vhost);
 	    	$channel = $connection->channel();
 	    	$msg = $channel->basic_get($mq->queue);
 
@@ -81,7 +83,7 @@
         }
 
 	public function ProcessOneRPCrequest($mq, $callback) {
-		$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass);
+		$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass, $mq->vhost);
         	$channel = $connection->channel();
 
         	$channel->queue_declare($mq->queue, false, false, false, false);
