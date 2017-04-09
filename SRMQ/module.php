@@ -56,7 +56,7 @@
 	}
 	
 
-        public function GetWorkWithOptions($ack_msg, $mq) {
+        public function GetWorkWithOptions(bool $ack_msg, $mq) {
 	    // 0: $id
 	    // 1: ack message
 	    // 2: mq parameters 
@@ -105,12 +105,12 @@
 
 	}
 
-	public function GetWork($ack_msg = true) {
+	public function GetWork(bool $ack_msg = true) {
 		return $this->GetWorkWithOptions($ack_msg, $this->mqConfig());
 	}
 	    
-	public function PutMessage($message) {
-		
+	public function PutMessage(string $message) {
+	    $mq = $this->mqconfig();
 	    try {	
 		$connection = new AMQPStreamConnection($mq->srv, $mq->port, $mq->user, $mq->pass, $mq->vhost);
 
