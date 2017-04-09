@@ -56,7 +56,7 @@
 	}
 	
 
-        public function GetWorkWithOptions(bool $ack_msg = true, $mq) {
+        public function GetWorkWithOptions($ack_msg = true, $mq) {
 	    // 0: $id
 	    // 1: ack message
 	    // 2: mq parameters 
@@ -105,7 +105,7 @@
 
 	}
 
-	public function GetWork(bool $ack_msg = true) {
+	public function GetWork($ack_msg = true) {
 		return $this->GetWorkWithOptions($ack_msg, $this->mqConfig());
 	}
 	    
