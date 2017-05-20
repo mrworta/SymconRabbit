@@ -142,7 +142,7 @@
 	}
 
 	function AmazonCheckToken($msg) {
-	   $call = MsgToCall($msg);
+	   $call = $this->MsgToCall($msg);
            try {
 		$token = $call->user->accessToken;
                 $amazon = curl_init('https://api.amazon.com/user/profile');
@@ -161,7 +161,7 @@
   	}
   
   	function AmazonFetchProfile($msg) {
-	   $call = MsgToCall($msg);
+	   $call = $this->MsgToCall($msg);
            try {
  		$token = $call->user->accessToken;
                 $amazon = curl_init('https://api.amazon.com/user/profile');
