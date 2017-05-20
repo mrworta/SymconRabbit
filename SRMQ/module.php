@@ -135,9 +135,9 @@
 	function MsgToCall($msg) {
 	  if (is_object($msg)) {  
   	  	$call = json_decode($msg->body);	  
-	  	if ($mq->$LogLevel > 3) { var_dump($call); }
+	  	if ($mq->LogLevel > 3) { var_dump($call); }
 		return $call;
-  	  } else { if ($mq->$LogLevel > 2) { print "No object returned."; }; return null; }
+  	  } else { if ($mq->LogLevel > 2) { print "No object returned."; }; return null; }
 
 	}
 
