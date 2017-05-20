@@ -135,14 +135,15 @@
 	function MsgToCall($msg) {
 	  if (is_object($msg)) {  
   	  	$call = json_decode($msg->body);	  
-	  	if ($LogLevel > 3) { var_dump($call); }
+	  	if ($mq->$LogLevel > 3) { var_dump($call); }
 		return $call;
-  	  } else { if ($LogLevel > 2) { print "No object returned."; }; return null; }
+  	  } else { if ($mq->$LogLevel > 2) { print "No object returned."; }; return null; }
 
 	}
 
 	function AmazonCheckToken($msg) {
 	   $call = $this->MsgToCall($msg);
+	   if ($call == null) { return $call; }
            try {
 		$token = $call->user->accessToken;
                 $amazon = curl_init('https://api.amazon.com/user/profile');
@@ -162,6 +163,7 @@
   
   	function AmazonFetchProfile($msg) {
 	   $call = $this->MsgToCall($msg);
+	   if ($call == null) { return $call; }
            try {
  		$token = $call->user->accessToken;
                 $amazon = curl_init('https://api.amazon.com/user/profile');
