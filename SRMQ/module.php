@@ -133,6 +133,7 @@
 	}
 
 	function MsgToCall($msg) {
+	  $mq = $this->mqconfig();
 	  if (is_object($msg)) {  
   	  	$call = json_decode($msg->body);	  
 	  	if ($mq->LogLevel > 3) { var_dump($call); }
