@@ -7,13 +7,13 @@
         { "type": "PasswordTextBox", "name": "Password", "caption": "Password" },
         { "type": "ValidationTextBox", "name": "vHost", "caption": "RabbitMQ vHost" },
         { "type": "ValidationTextBox", "name": "Queue", "caption": "RabbitMQ Queue" },
-        { "type": "ValidationTextBox", "name": "LogLevel", "caption": "Module LogLevel" },
+        { "type": "ValidationTextBox", "name": "LogLevel", "caption": "Module LogLevel" }
     ],
     "actions":
     [
         { "type": "Button", "label": "Fetch Message", "onClick": "var_dump(SRMQ_GetWork($id,false));" },
         { "type": "ValidationTextBox", "name": "Result", "caption": "Result-Code" },
-        { "type": "ValidationTextBox", "name": "Message", "caption": "Message" },
+        { "type": "ValidationTextBox", "name": "Message", "caption": "Message" }
     ],
     "status":
     [
@@ -21,6 +21,6 @@
         { "code": 102, "icon": "active", "caption": "Login information valid" },
         { "code": 201, "icon": "error", "caption": "Authentication failed" },
         { "code": 202, "icon": "error", "caption": "No work left" },
-        { "code": 203, "icon": "error", "caption": "connection timed out" },
+        { "code": 203, "icon": "error", "caption": "connection timed out" }
     ]
 }
